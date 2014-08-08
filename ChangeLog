@@ -135,6 +135,7 @@ Changes between 1.14 and 1.15
 
 Changes between 1.15 and 1.16
 *****************************
+08-08-2014	20:00:07	Jess Portnoy <kernel01@gmail.com>
 - patch by Philip Marsh <marsh@philipmarsh.org> for MAC OSX.
   0) Status Fatal: tmpdir is far too small for OSX which uses 80+? for a
   mkstemp filename. I have arbitrarily increased it to 500.
