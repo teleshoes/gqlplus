@@ -549,6 +549,7 @@ Copyright (C) 2004 Ljubomir J. Buturovic. All Rights Reserved.
   static  FILE   *lptr;
   static  char   *sql_prompt = (char *) 0; /* user-defined prompt */
   static  char   *username = (char *) 0;
+  static  const char *home_dir;
 
 
   static char* szCmdPrefix = "--!";
@@ -2113,23 +2114,70 @@ static char **get_column_names(char *tablename, char *owner, int fdin, int fdout
   char *str = (char *) 0;
   char *prompt = (char *) 0;
   char **columns = (char **) 0;
+  char *gqlplus_dir = (char *) 0;
+  char *column_cache_dir = (char *) 0;
+  char *cache_filename = (char *) 0;
+  long filesize;
+  FILE *f_cache;
 
   if (tablename)
   {
-    len = strlen(DESCRIBE)+strlen(tablename)+4;
-    if (owner)
-      len += strlen(owner);
-    ccmd = malloc(len*sizeof(char));
-    if (owner)
-      sprintf(ccmd, "%s %s.%s\n", DESCRIBE, owner, tablename);
-    else
-      sprintf(ccmd, "%s %s\n", DESCRIBE, tablename);
-    write(fdout, ccmd, strlen(ccmd));
-    prompt = get_sqlplus(fdin, line, &str);
-    free(prompt);
+    len = strlen(home_dir)+9;
+    gqlplus_dir = malloc(len*sizeof(char));
+    sprintf(gqlplus_dir, "%s/.gqlplus", home_dir);
+
+    len = strlen(gqlplus_dir)+13;
+    column_cache_dir = malloc(len*sizeof(char));
+    sprintf(column_cache_dir, "%s/column_cache", gqlplus_dir);
+
+    len = strlen(column_cache_dir)+strlen(tablename)+strlen(owner)+2 + 20;
+    cache_filename = malloc(len*sizeof(char));
+    sprintf(cache_filename, "%s/%s-%s", column_cache_dir, tablename, owner);
+
+    mkdir(gqlplus_dir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    mkdir(column_cache_dir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
+    if(access( cache_filename, F_OK ) != -1 ) {
+      f_cache = fopen(cache_filename, "rb");
+      if (f_cache == NULL) {
+        printf("Error reading file: %s\n", cache_filename);
+        exit(1);
+      }
+      fseek(f_cache, 0, SEEK_END);
+      filesize = ftell(f_cache);
+      fseek(f_cache, 0, SEEK_SET);
+
+      str = malloc(filesize + 1);
+      fread(str, filesize, 1, f_cache);
+      fclose(f_cache);
+
+      str[filesize] = 0;
+    } else {
+      len = strlen(DESCRIBE)+strlen(tablename)+4;
+      if (owner)
+        len += strlen(owner);
+      ccmd = malloc(len*sizeof(char));
+      if (owner)
+        sprintf(ccmd, "%s %s.%s\n", DESCRIBE, owner, tablename);
+      else
+        sprintf(ccmd, "%s %s\n", DESCRIBE, tablename);
+      write(fdout, ccmd, strlen(ccmd));
+      prompt = get_sqlplus(fdin, line, &str);
+      free(prompt);
+      free(ccmd);
+
+      f_cache = fopen(cache_filename, "w");
+      if (f_cache != NULL) {
+        fprintf(f_cache, "%s", str);
+        fclose(f_cache);
+      }
+    }
+
     columns = parse_columns(str);
     free(str);
-    free(ccmd);
+    free(gqlplus_dir);
+    free(column_cache_dir);
+    free(cache_filename);
   }
   return columns;
 }
@@ -2677,6 +2725,8 @@ int main(int argc, char **argv)
   /* stop the compiler from complaining */
   int iTemp = strlen(rcsid);
   iTemp++;
+
+  home_dir = getenv("HOME");
 
   tod1 = now();
   state = STARTUP;
