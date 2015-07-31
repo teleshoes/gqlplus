@@ -3,11 +3,13 @@
    Created by: Ljubomir J. Buturovic
 Created: May 18, 2002
 Maintained by: Jess Portnoy
-Last modification date: Nov 22 2011 
 Purpose: drop-in replacement for sqlplus with command line
 editing/history and table/column name completion.
 
-Copyright (C) 2004 Ljubomir J. Buturovic. All Rights Reserved.
+Copyright (C) 2004 Ljubomir J. Buturovic
+
+additional modifications:
+  Copright 2015 Elliot Wolk
 */
 
 /*
