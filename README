@@ -1,6 +1,6 @@
 WHAT IS GQLPLUS?
 
-gqlplus is a UNIX front-end program for Oracle's command-line utility
+gqlplus is a UNIX front-end program for Oracle command-line utility
 sqlplus. gqlplus is functionally nearly identical to sqlplus, with the
 addition of command-line editing, history, table-name and optional
 column-name completion.  The editing is similar to tcsh and bash
@@ -9,8 +9,8 @@ shells.
 
 BUILDING AND INSTALLING GQLPLUS
 
-GQLPLUS comes in 3 forms:
-A tar.gz of archived code, a deb package and an RPM package.
+GQLPLUS comes in 2 forms:
+A tar.gz of archived code and an RPM package.
 
 To unpack gqlplus tar.gz, download the tar/compressed file
 gqlplus-n.nn.tar.gz and type:
@@ -26,11 +26,9 @@ $ rpmbuild -ba /path/to/spec/files/gqlplus.spec
 NOTE: this requires the rpm-build package to be installed.
 
 The executable is called `gqlplus'. Prebuilt executables are provided
-for RPM based Linux distros.
+for Linux 64bit in the form of an RPM file. 
 One can also extract the contents of this RPM by issuing:
-$ rpm2cpio gqlplus-n.n-n.%{_arch}.rpm | cpio -idmv
-
-gqlplus-n.n-n.%{_arch}.src.rpm is also available.
+$ rpm2cpio gqlplus-1.14-1.x86_64.rpm | cpio -idmv
 
 To build gqlplus for another UNIX-like platform, type:
 
@@ -38,6 +36,10 @@ $ ./configure
 $ make
 
 The executable gqlplus will be built in the current directory. 
+
+NOTE: I suggest you _don't_ run `make install' since it may overwrite
+your existing readline, and is useless anyway, since the only thing to
+be installed is the gqlplus binary. You can do this by hand.
 
 gqlplus uses the GNU Readline Library to achieve its
 functionality. Version 4.3 of the library is provided with gqlplus,
@@ -142,7 +144,7 @@ gqlplus is licensed under the GNU General Public License. See file
 LICENSE for details.
 
 
-AUTHORS
+AUTHOR
 
 gqlplus is written and maintained by Ljubomir J. Buturovic of San
 Francisco State University, San Francisco, California and Jess Portnoy. 

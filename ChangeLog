@@ -123,28 +123,14 @@ Changes between 1.13 and 1.14
 *****************************
 	
 12-18-2011	20:15:07	Jess Portnoy <kernel01@gmail.com>
-- Removed dependency of bundled readline. Though it is still shipped with the source code, one would have to explicitly ask to build it. We do not link against a static archive of ncurses why should we in the case of readline?
-- Minor maintenance of the autotools files
+	- Removed dependency of bundled readline. Though it is still shipped with
+	the source code, one would have to explicitly ask to build it. We do not link against a static
+	archive of ncurses why should we in the case of readline?
+	- Minor maintenance of the autotools files
 
 Changes between 1.14 and 1.15
 *****************************
 	
 01-23-2012	20:15:07	Jess Portnoy <kernel01@gmail.com>
-- Use mkstemp() instead tmpnam() - patch suggestion made by Stefan Kuttler.
-- Code also honors TMPDIR,  TEMPDIR and TEMP ENV vars [in that order], otherwise, defaults to /tmp.]
-
-Changes between 1.15 and 1.16
-*****************************
-08-08-2014	20:00:07	Jess Portnoy <kernel01@gmail.com>
-- patch by Philip Marsh <marsh@philipmarsh.org> for MAC OSX.
-  0) Status Fatal: tmpdir is far too small for OSX which uses 80+? for a
-  mkstemp filename. I have arbitrarily increased it to 500.
- 
-  1) Status Fatal: Using mkstemp and fdopen to handle a file is
-  inappropiate and unnecessary.
- 
-  2) Status Idiosyncratic: The use of a second pointer (tmpname) to
-  replace tmpdir is unnecessary and a little confusing(at the time).
- 
-  3) Status Fatal: OSX requires double quotes around the connect string,
-  similar to your define for GET_PROMPT
+	- Use mkstemp() instead tmpnam() - patch suggestion made by Stefan Kuttler.
+	Code also honors TMPDIR,  TEMPDIR and TEMP ENV vars [in that order], otherwise, defaults to /tmp.]
