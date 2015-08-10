@@ -1046,7 +1046,7 @@ static char *get_sqlplus(int fd, char *line, char **outstr)
   if (outstr != (char **) 0){
     *outstr = otr;
   }
-  /*install_sigint_handler();*/
+  install_sigint_handler();
   return prompt;
 }
 
