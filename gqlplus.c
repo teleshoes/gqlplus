@@ -1446,36 +1446,36 @@ static char *stat_sqlplus(const char *orahome)
   spath = getenv("SQLPLUS_BIN");
   if (!spath){
     spath = search_exe("sqlplus");
-    if (orahome){
-      /*
-         Not found, check $ORACLE_HOME/bin.
-         */
-      spath = malloc(strlen(orahome)+30);
-      sprintf(spath, "%s/bin/sqlplus", orahome);
-      status = stat(spath, &buf);
-      if (!status) {
-        mode = check_mode(buf.st_mode);
-        if (!mode){
-          spath = sfree(spath);
-        }
-      }else{
+  }
+  if (!spath && orahome){
+    /*
+       Not found, check $ORACLE_HOME/bin.
+       */
+    spath = malloc(strlen(orahome)+30);
+    sprintf(spath, "%s/bin/sqlplus", orahome);
+    status = stat(spath, &buf);
+    if (!status) {
+      mode = check_mode(buf.st_mode);
+      if (!mode){
         spath = sfree(spath);
       }
+    }else{
+      spath = sfree(spath);
     }
-    if (!spath){
-      /*
-         Check the current directory.
-         */
-      spath = strdup("./sqlplus");
-      status = stat(spath, &buf);
-      if (!status) {
-        mode = check_mode(buf.st_mode);
-        if (!mode){
-          spath = sfree(spath);
-        }
-      }else{
+  }
+  if (!spath){
+    /*
+       Check the current directory.
+       */
+    spath = strdup("./sqlplus");
+    status = stat(spath, &buf);
+    if (!status) {
+      mode = check_mode(buf.st_mode);
+      if (!mode){
         spath = sfree(spath);
       }
+    }else{
+      spath = sfree(spath);
     }
   }
   return spath;
