@@ -2132,7 +2132,13 @@ static char **get_column_names(char *tablename, char *owner, int fdin, int fdout
     column_cache_dir = malloc(len*sizeof(char));
     sprintf(column_cache_dir, "%s/column_cache", gqlplus_dir);
 
-    len = strlen(column_cache_dir)+strlen(tablename)+strlen(owner)+2 + 20;
+    len = strlen(column_cache_dir)+strlen(tablename)+2 + 20;
+    if (owner) {
+      len += strlen(owner);
+    } else {
+      len += 4;
+    }
+
     cache_filename = malloc(len*sizeof(char));
     sprintf(cache_filename, "%s/%s-%s", column_cache_dir, tablename, owner);
 
