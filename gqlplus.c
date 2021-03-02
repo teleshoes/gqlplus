@@ -2414,6 +2414,12 @@ static int gqlplus_switch(char **argv, char *sw)
 
 static int install_completion(char *line, int *all_tables)
 {
+  char *skip_completion;
+  skip_completion = getenv("GQLPLUS_SKIP_COMPLETION");
+  if(skip_completion && strcmp(skip_completion, "0") != 0 && strcmp(skip_completion, "no") != 0){
+    return 0;
+  }
+
   int completion_names = 0;
 
   rl_completion_entry_function = tablecolumn_generator;
