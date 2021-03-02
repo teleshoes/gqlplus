@@ -449,6 +449,7 @@ additional modifications:
 #include <signal.h>
 #include <fcntl.h>
 #include <termios.h>
+#include <sys/time.h>
 #include <sys/wait.h>
 #include <errno.h>
 #include <sys/stat.h>
