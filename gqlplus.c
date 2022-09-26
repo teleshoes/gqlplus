@@ -557,7 +557,7 @@ additional modifications:
 
   static char* szCmdPrefix = "--!";
   static char *histname;
-  static int histmax = 200;
+  static int histmax = 50000;
 
 void save_history(void)
 {
